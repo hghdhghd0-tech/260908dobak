@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.font-black-han {
+  font-family: 'Black Han Sans', sans-serif;
+}
+
+/* Flashy animations */
+@keyframes neon-glow {
+  0%, 100% {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #f0f, 0 0 40px #0ff, 0 0 80px #f0f;
+  }
+  50% {
+    text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #f0f, 0 0 20px #0ff, 0 0 40px #f0f;
+  }
+}
+
+.neon-text {
+  animation: neon-glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.animate-shake {
+  animation: shake 0.5s;
+}
+
+/* Glitch effect for the transition */
+.glitch-effect {
+  position: relative;
+}
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+}
+.glitch-effect::before {
+  left: 2px;
+  text-shadow: -1px 0 red;
+  clip: rect(24px, 550px, 90px, 0);
+  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+.glitch-effect::after {
+  left: -2px;
+  text-shadow: -1px 0 blue;
+  clip: rect(85px, 550px, 140px, 0);
+  animation: glitch-anim 2.5s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim {
+  0% { clip: rect(78px, 9999px, 86px, 0); }
+  5% { clip: rect(10px, 9999px, 85px, 0); }
+  10% { clip: rect(61px, 9999px, 15px, 0); }
+  15% { clip: rect(15px, 9999px, 11px, 0); }
+  20% { clip: rect(100px, 9999px, 51px, 0); }
+  25% { clip: rect(25px, 9999px, 10px, 0); }
+  30% { clip: rect(86px, 9999px, 30px, 0); }
+  35% { clip: rect(14px, 9999px, 73px, 0); }
+  40% { clip: rect(98px, 9999px, 97px, 0); }
+  45% { clip: rect(26px, 9999px, 74px, 0); }
+  50% { clip: rect(70px, 9999px, 12px, 0); }
+  55% { clip: rect(51px, 9999px, 5px, 0); }
+  60% { clip: rect(81px, 9999px, 62px, 0); }
+  65% { clip: rect(12px, 9999px, 20px, 0); }
+  70% { clip: rect(40px, 9999px, 67px, 0); }
+  75% { clip: rect(90px, 9999px, 89px, 0); }
+  80% { clip: rect(32px, 9999px, 78px, 0); }
+  85% { clip: rect(64px, 9999px, 25px, 0); }
+  90% { clip: rect(20px, 9999px, 55px, 0); }
+  95% { clip: rect(15px, 9999px, 80px, 0); }
+  100% { clip: rect(60px, 9999px, 90px, 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip: rect(65px, 9999px, 100px, 0); }
+  5% { clip: rect(50px, 9999px, 7px, 0); }
+  10% { clip: rect(89px, 9999px, 20px, 0); }
+  15% { clip: rect(10px, 9999px, 85px, 0); }
+  20% { clip: rect(20px, 9999px, 60px, 0); }
+  25% { clip: rect(95px, 9999px, 45px, 0); }
+  30% { clip: rect(35px, 9999px, 30px, 0); }
+  35% { clip: rect(70px, 9999px, 12px, 0); }
+  40% { clip: rect(5px, 9999px, 90px, 0); }
+  45% { clip: rect(80px, 9999px, 25px, 0); }
+  50% { clip: rect(15px, 9999px, 65px, 0); }
+  55% { clip: rect(40px, 9999px, 10px, 0); }
+  60% { clip: rect(60px, 9999px, 40px, 0); }
+  65% { clip: rect(90px, 9999px, 75px, 0); }
+  70% { clip: rect(25px, 9999px, 50px, 0); }
+  75% { clip: rect(85px, 9999px, 95px, 0); }
+  80% { clip: rect(10px, 9999px, 80px, 0); }
+  85% { clip: rect(55px, 9999px, 15px, 0); }
+  90% { clip: rect(75px, 9999px, 35px, 0); }
+  95% { clip: rect(30px, 9999px, 55px, 0); }
+  100% { clip: rect(95px, 9999px, 20px, 0); }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
