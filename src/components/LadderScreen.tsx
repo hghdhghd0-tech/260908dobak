@@ -185,7 +185,7 @@ export const LadderScreen: React.FC<LadderScreenProps> = ({
       
       {/* Fake Browser/Header */}
       <div className="bg-[#d4b5c4] text-white px-4 py-2 flex justify-between items-center shadow-sm">
-        <span className="font-black-han text-lg md:text-xl tracking-wide text-yellow-300 drop-shadow-[0_0_10px_rgba(253,224,71,0.8)] animate-pulse">영천중학교 김진균선생님과 함께 도박예방</span>
+        <span className="brand-bar font-black-han gold-text text-lg md:text-xl tracking-wide">영천중학교 김진균선생님과 함께 도박예방</span>
         <span className="text-pink-700 text-sm font-bold tracking-widest">{round}회차 진행중</span>
       </div>
 
@@ -373,7 +373,7 @@ export const LadderScreen: React.FC<LadderScreenProps> = ({
           <button 
             onClick={handleStartDraw}
             disabled={phase !== 'BETTING' || betAmount === 0 || !betChoice}
-            className="sheen w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-sm md:text-lg py-1.5 rounded border-2 border-yellow-700 shadow-[0_0_14px_rgba(250,204,21,0.45),inset_0_1px_0_rgba(255,255,255,0.5)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap"
+            className="w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-sm md:text-lg py-1.5 rounded border-2 border-yellow-700 shadow-[0_0_10px_rgba(250,204,21,0.3)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap"
           >
             {phase === 'BETTING' ? '홀짝 베팅 확정 (추첨 시작)' : '추첨 진행 중...'}
           </button>

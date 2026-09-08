@@ -1,246 +1,466 @@
 @import "tailwindcss";
 
+/* ==========================================================
+   벨벳 & 골드 — 카지노 로비 디자인 토큰
+   원칙: 화려함을 금색 한 곳에만 쓰고 나머지는 조용하게.
+   ========================================================== */
+:root {
+  --velvet-0:  #0a0610;   /* 가장 어두운 바탕 */
+  --velvet-1:  #120b1b;   /* 카드 하단 */
+  --velvet-2:  #1c1128;   /* 카드 상단 */
+
+  --gold-hi:   #fbe9a8;
+  --gold:      #e6c463;
+  --gold-mid:  #c9962e;
+  --gold-lo:   #7a5a14;
+
+  --ruby:      #e0245e;
+  --ivory:     #f3ecdf;
+  --ivory-dim: #b6a894;
+  --ivory-mute:#6d6274;
+}
+
 body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background-color: #000;
-  color: #fff;
+  font-family: 'Gothic A1', 'Noto Sans KR', sans-serif;
+  background-color: var(--velvet-0);
+  color: var(--ivory);
   overflow-x: hidden;
-  /* Crisper text rendering across the whole app (instant premium lift) */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
-.font-black-han {
-  font-family: 'Black Han Sans', sans-serif;
+.font-black-han { font-family: 'Black Han Sans', sans-serif; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ---------- 로비 배경: 벨벳 + 카지노 카펫 마름모 ---------- */
+.lobby-bg {
+  background-color: var(--velvet-0);
+  background-image:
+    radial-gradient(120% 80% at 50% -10%, rgba(230,196,99,.13), transparent 62%),
+    radial-gradient(80% 60% at 12% 108%, rgba(224,36,94,.10), transparent 60%),
+    radial-gradient(70% 55% at 92% 96%, rgba(230,196,99,.07), transparent 60%);
 }
-
-/* ================================================================
-   GRAPHICS POLISH LAYER
-   Reusable utilities that raise render quality without changing
-   layout or copy. Applied additively via className.
-   ================================================================ */
-
-/* --- Fine film grain over the whole app: premium texture, very subtle --- */
-body::after {
-  content: "";
+.lobby-bg::before {
+  content: '';
   position: fixed;
   inset: 0;
-  z-index: 2147483000;
   pointer-events: none;
-  opacity: 0.05;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .5;
+  background-image:
+    repeating-linear-gradient(45deg,  rgba(230,196,99,.05) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(-45deg, rgba(230,196,99,.05) 0 1px, transparent 1px 26px);
 }
 
-/* --- Metallic gold foil text (replaces muddy heavy-stroke gold) --- */
-.gold-foil {
-  background: linear-gradient(
-    180deg,
-    #fff8dc 0%,
-    #ffe9a3 16%,
-    #f7cd4c 40%,
-    #e0a92a 60%,
-    #a1691a 82%,
-    #f4d67a 100%
-  );
+/* ---------- 금박 텍스트 ---------- */
+.gold-text {
+  background: linear-gradient(174deg,
+    var(--gold-hi) 4%, var(--gold) 34%,
+    var(--gold-mid) 54%, var(--gold-hi) 78%, var(--gold) 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: transparent;
-  -webkit-text-stroke: 1px rgba(60, 30, 0, 0.5);
-  filter:
-    drop-shadow(0 2px 1px rgba(0, 0, 0, 0.55))
-    drop-shadow(0 0 16px rgba(240, 190, 60, 0.35));
+}
+.gold-glow { filter: drop-shadow(0 0 22px rgba(230,196,99,.34)); }
+
+/* ---------- 금박 판 (버튼/리본) ---------- */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent, rgba(230,196,99,.15) 18%,
+    rgba(230,196,99,.65) 50%,
+    rgba(230,196,99,.15) 82%, transparent);
 }
 
-/* --- Diagonal light sweep (casino shine) --- */
-@keyframes sheen-sweep {
-  0% { transform: translateX(-140%) skewX(-20deg); }
-  100% { transform: translateX(260%) skewX(-20deg); }
+/* ---------- 카드 ---------- */
+.game-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.055), transparent 42%),
+    linear-gradient(180deg, var(--velvet-2), var(--velvet-1));
+  border: 1px solid rgba(230,196,99,.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    0 10px 34px rgba(0,0,0,.55);
+  transition: border-color .28s ease, transform .28s ease, box-shadow .28s ease;
+}
+.game-card:hover,
+.game-card:focus-visible {
+  border-color: rgba(251,233,168,.78);
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 16px 44px rgba(0,0,0,.62),
+    0 0 34px rgba(230,196,99,.2);
+}
+.game-card:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; }
+
+/* 카드 모서리 금색 브래킷 */
+.corner {
+  position: absolute;
+  width: 15px; height: 15px;
+  border-color: rgba(230,196,99,.5);
+  transition: border-color .28s ease;
+}
+.game-card:hover .corner { border-color: rgba(251,233,168,.95); }
+
+/* 이모지 뒤 은은한 후광 */
+.emoji-halo {
+  position: absolute;
+  width: 108px; height: 108px;
+  border-radius: 50%;
+  filter: blur(26px);
+  opacity: .5;
+  transition: opacity .28s ease;
+}
+.game-card:hover .emoji-halo { opacity: .95; }
+
+/* ---------- 광택 스윕 ---------- */
+@keyframes sheen-x {
+  0%        { transform: translateX(-130%) skewX(-16deg); }
+  62%, 100% { transform: translateX(340%)  skewX(-16deg); }
 }
 .sheen { position: relative; overflow: hidden; }
 .sheen::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 55%;
-  height: 100%;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.16) 45%,
-    rgba(255, 255, 255, 0.28) 50%,
-    rgba(255, 255, 255, 0.16) 55%,
-    transparent 100%
-  );
-  transform: translateX(-140%) skewX(-20deg);
+  content: '';
+  position: absolute; inset: 0;
+  width: 26%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  animation: sheen-x 5.5s ease-in-out infinite;
   pointer-events: none;
-  z-index: 5;
-}
-.sheen:hover::after { animation: sheen-sweep 1.05s ease; }
-.sheen-auto::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 55%;
-  height: 100%;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.14) 48%,
-    rgba(255, 255, 255, 0.30) 50%,
-    rgba(255, 255, 255, 0.14) 52%,
-    transparent 100%
-  );
-  transform: translateX(-140%) skewX(-20deg);
-  pointer-events: none;
-  z-index: 5;
-  animation: sheen-sweep 5s ease-in-out infinite;
-}
-.sheen-auto { position: relative; overflow: hidden; }
-
-/* --- Depth bevel: inset top highlight + soft drop, no glow of its own --- */
-.bevel {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
-    0 14px 30px -14px rgba(0, 0, 0, 0.8);
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-}
-.bevel:hover {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
-    0 20px 44px -16px rgba(0, 0, 0, 0.9);
 }
 
-/* --- Glass panel: refined top highlight border + soft depth --- */
-.glass {
-  backdrop-filter: blur(10px) saturate(1.1);
-  -webkit-backdrop-filter: blur(10px) saturate(1.1);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 10px 30px -12px rgba(0, 0, 0, 0.7);
+/* ---------- 아주 느린 금색 맥동 (제목 전용) ---------- */
+@keyframes breathe {
+  0%, 100% { filter: drop-shadow(0 0 18px rgba(230,196,99,.28)); }
+  50%      { filter: drop-shadow(0 0 30px rgba(230,196,99,.5)); }
 }
+.breathe { animation: breathe 4.5s ease-in-out infinite; }
 
-/* --- Slim styled scrollbar for opted-in lists (global bars stay hidden) --- */
-.custom-scrollbar::-webkit-scrollbar { display: block; width: 6px; height: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.04); }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #f7cd4c, #a1691a);
-  border-radius: 999px;
-}
-
-/* Flashy animations */
+/* ---------- 기존 효과 유지 (EducationScreen 의존) ---------- */
 @keyframes neon-glow {
-  0%, 100% {
-    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #f0f, 0 0 40px #0ff, 0 0 80px #f0f;
-  }
-  50% {
-    text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #f0f, 0 0 20px #0ff, 0 0 40px #f0f;
-  }
+  0%, 100% { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #f0f, 0 0 40px #0ff, 0 0 80px #f0f; }
+  50%      { text-shadow: 0 0 2px #fff, 0 0 5px #fff, 0 0 10px #f0f, 0 0 20px #0ff, 0 0 40px #f0f; }
 }
-
-.neon-text {
-  animation: neon-glow 1.5s ease-in-out infinite alternate;
-}
+.neon-text { animation: neon-glow 1.5s ease-in-out infinite alternate; }
 
 @keyframes shake {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  10% { transform: translate(-1px, -2px) rotate(-1deg); }
-  20% { transform: translate(-3px, 0px) rotate(1deg); }
-  30% { transform: translate(3px, 2px) rotate(0deg); }
-  40% { transform: translate(1px, -1px) rotate(1deg); }
-  50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
-  70% { transform: translate(3px, 1px) rotate(-1deg); }
-  80% { transform: translate(-1px, -1px) rotate(1deg); }
-  90% { transform: translate(1px, 2px) rotate(0deg); }
+  0%   { transform: translate(1px, 1px) rotate(0deg); }
+  20%  { transform: translate(-3px, 0px) rotate(1deg); }
+  40%  { transform: translate(1px, -1px) rotate(1deg); }
+  60%  { transform: translate(-3px, 1px) rotate(0deg); }
+  80%  { transform: translate(-1px, -1px) rotate(1deg); }
   100% { transform: translate(1px, -2px) rotate(-1deg); }
 }
+.animate-shake { animation: shake 0.5s; }
 
-.animate-shake {
-  animation: shake 0.5s;
-}
-
-/* Glitch effect for the transition */
-.glitch-effect {
-  position: relative;
-}
+.glitch-effect { position: relative; }
 .glitch-effect::before,
 .glitch-effect::after {
   content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
   background: black;
 }
 .glitch-effect::before {
-  left: 2px;
-  text-shadow: -1px 0 red;
+  left: 2px; text-shadow: -1px 0 red;
   clip: rect(24px, 550px, 90px, 0);
   animation: glitch-anim-2 3s infinite linear alternate-reverse;
 }
 .glitch-effect::after {
-  left: -2px;
-  text-shadow: -1px 0 blue;
+  left: -2px; text-shadow: -1px 0 blue;
   clip: rect(85px, 550px, 140px, 0);
   animation: glitch-anim 2.5s infinite linear alternate-reverse;
 }
-
 @keyframes glitch-anim {
-  0% { clip: rect(78px, 9999px, 86px, 0); }
-  5% { clip: rect(10px, 9999px, 85px, 0); }
-  10% { clip: rect(61px, 9999px, 15px, 0); }
-  15% { clip: rect(15px, 9999px, 11px, 0); }
-  20% { clip: rect(100px, 9999px, 51px, 0); }
-  25% { clip: rect(25px, 9999px, 10px, 0); }
-  30% { clip: rect(86px, 9999px, 30px, 0); }
-  35% { clip: rect(14px, 9999px, 73px, 0); }
-  40% { clip: rect(98px, 9999px, 97px, 0); }
-  45% { clip: rect(26px, 9999px, 74px, 0); }
-  50% { clip: rect(70px, 9999px, 12px, 0); }
-  55% { clip: rect(51px, 9999px, 5px, 0); }
-  60% { clip: rect(81px, 9999px, 62px, 0); }
-  65% { clip: rect(12px, 9999px, 20px, 0); }
-  70% { clip: rect(40px, 9999px, 67px, 0); }
-  75% { clip: rect(90px, 9999px, 89px, 0); }
-  80% { clip: rect(32px, 9999px, 78px, 0); }
-  85% { clip: rect(64px, 9999px, 25px, 0); }
-  90% { clip: rect(20px, 9999px, 55px, 0); }
-  95% { clip: rect(15px, 9999px, 80px, 0); }
+  0%   { clip: rect(78px, 9999px, 86px, 0); }
+  25%  { clip: rect(25px, 9999px, 10px, 0); }
+  50%  { clip: rect(70px, 9999px, 12px, 0); }
+  75%  { clip: rect(90px, 9999px, 89px, 0); }
   100% { clip: rect(60px, 9999px, 90px, 0); }
 }
-
 @keyframes glitch-anim-2 {
-  0% { clip: rect(65px, 9999px, 100px, 0); }
-  5% { clip: rect(50px, 9999px, 7px, 0); }
-  10% { clip: rect(89px, 9999px, 20px, 0); }
-  15% { clip: rect(10px, 9999px, 85px, 0); }
-  20% { clip: rect(20px, 9999px, 60px, 0); }
-  25% { clip: rect(95px, 9999px, 45px, 0); }
-  30% { clip: rect(35px, 9999px, 30px, 0); }
-  35% { clip: rect(70px, 9999px, 12px, 0); }
-  40% { clip: rect(5px, 9999px, 90px, 0); }
-  45% { clip: rect(80px, 9999px, 25px, 0); }
-  50% { clip: rect(15px, 9999px, 65px, 0); }
-  55% { clip: rect(40px, 9999px, 10px, 0); }
-  60% { clip: rect(60px, 9999px, 40px, 0); }
-  65% { clip: rect(90px, 9999px, 75px, 0); }
-  70% { clip: rect(25px, 9999px, 50px, 0); }
-  75% { clip: rect(85px, 9999px, 95px, 0); }
-  80% { clip: rect(10px, 9999px, 80px, 0); }
-  85% { clip: rect(55px, 9999px, 15px, 0); }
-  90% { clip: rect(75px, 9999px, 35px, 0); }
-  95% { clip: rect(30px, 9999px, 55px, 0); }
+  0%   { clip: rect(65px, 9999px, 100px, 0); }
+  25%  { clip: rect(95px, 9999px, 45px, 0); }
+  50%  { clip: rect(15px, 9999px, 65px, 0); }
+  75%  { clip: rect(85px, 9999px, 95px, 0); }
   100% { clip: rect(95px, 9999px, 20px, 0); }
 }
 
-::-webkit-scrollbar {
-  display: none;
+::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sheen::after, .breathe, .neon-text { animation: none !important; }
+  .game-card { transition: none; }
+  .game-card:hover { transform: none; }
+}
+
+/* ==========================================================
+   로비(첫 화면) 전용 — 벨벳/골드 체계를 그대로 확장
+   ========================================================== */
+.lobby-chrome { background: #0a0610; }
+.lobby-panel  { background: #120b1b; border-color: rgba(230,196,99,.14); }
+
+/* 상단 내비 링크 */
+.nav-link {
+  position: relative;
+  padding: 6px 0;
+  color: var(--ivory-dim);
+  transition: color .2s ease;
+}
+.nav-link:hover { color: var(--ivory); }
+.nav-link.is-active { color: var(--gold-hi); }
+.nav-link.is-active::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: -22px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+/* ---------- 히어로 ---------- */
+.hero-stage {
+  background:
+    radial-gradient(120% 100% at 50% 42%, #ff59a8 0%, #b13ce0 22%, #6a1fb0 44%, #2e0f57 70%, #180830 100%);
+  border: 1px solid rgba(251,233,168,.5);
+  box-shadow: 0 22px 70px rgba(0,0,0,.8), inset 0 0 0 6px rgba(251,233,168,.09);
+}
+.hero-rays {
+  background: repeating-conic-gradient(from 0deg,
+    rgba(255,255,255,.5) 0deg 3.6deg, transparent 3.6deg 12deg);
+  mix-blend-mode: soft-light;
+  opacity: .3;
+  animation: spin-slow 90s linear infinite;
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+.hero-vignette {
+  background: radial-gradient(64% 62% at 50% 48%, transparent 42%, rgba(14,4,26,.72) 100%);
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0)    rotate(-4deg); }
+  50%      { transform: translateY(-14px) rotate(4deg); }
+}
+.float-slow { animation: float-y 7s ease-in-out infinite; }
+
+/* DAILY WINS 명판 */
+.plaque {
+  background: linear-gradient(180deg, #ff4d4d 0%, #d81f2a 46%, #8e0f16 100%);
+  border: 4px solid;
+  border-image: linear-gradient(180deg, #fff0b8, #e6c463 45%, #a3751b) 1;
+  box-shadow: 0 10px 30px rgba(0,0,0,.62), inset 0 2px 0 rgba(255,255,255,.34);
+}
+
+/* 핑크 리본 */
+.ribbon-pink {
+  background: linear-gradient(180deg, #ff85c2 0%, #ef3f96 55%, #c21f6e 100%);
+  border: 2px solid #ffd0e6;
+  box-shadow: 0 6px 20px rgba(224,36,126,.55), inset 0 2px 0 rgba(255,255,255,.42);
+}
+
+/* 잭팟 숫자 */
+.jackpot {
+  background: linear-gradient(180deg,
+    #fffbe8 0%, #ffe887 24%, #f5c236 48%, #9d6708 72%, #ffeaa0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px #3b1a02;
+  filter:
+    drop-shadow(0 3px 0 #6d3d05)
+    drop-shadow(0 12px 20px rgba(0,0,0,.72))
+    drop-shadow(0 0 26px rgba(245,194,54,.42));
+}
+
+/* 입장 안내 네온 판 */
+.enter-plate {
+  background: rgba(8,3,16,.82);
+  border: 2px solid rgba(251,233,168,.85);
+  box-shadow: 0 0 34px rgba(230,196,99,.5), inset 0 0 26px rgba(230,196,99,.12);
+  transition: box-shadow .3s ease, transform .3s ease;
+}
+.enter-plate:hover {
+  box-shadow: 0 0 54px rgba(230,196,99,.78), inset 0 0 30px rgba(230,196,99,.2);
+  transform: scale(1.02);
+}
+
+/* 배수 뱃지 */
+.mult-badge {
+  background: radial-gradient(circle at 34% 28%, #241329, #0a0610 72%);
+  border: 3px solid var(--gold);
+  box-shadow: 0 0 26px rgba(230,196,99,.55), inset 0 2px 8px rgba(0,0,0,.7);
+}
+
+/* ---------- 게임 타일 ---------- */
+.tile {
+  background: linear-gradient(180deg, #1a1026, #110a19);
+  border: 1px solid rgba(230,196,99,.16);
+  transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+.tile:hover {
+  border-color: rgba(251,233,168,.7);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.6), 0 0 26px rgba(230,196,99,.16);
+}
+.tile-art { position: relative; }
+.tile-art::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 46%, rgba(10,6,16,.9) 100%);
+}
+.play-btn {
+  background: rgba(230,196,99,.12);
+  border: 1px solid rgba(230,196,99,.34);
+  color: var(--gold-hi);
+  transition: background .22s ease, color .22s ease;
+}
+.tile:hover .play-btn {
+  background: linear-gradient(180deg, var(--gold-hi), var(--gold-mid));
+  color: #2a1a02;
+  border-color: var(--gold-hi);
+}
+
+/* 라이브 카지노 타일 */
+.live-tile {
+  background: linear-gradient(120deg, #191024, #0f0917);
+  border: 1px solid rgba(230,196,99,.14);
+  transition: border-color .25s ease, background .25s ease;
+}
+.live-tile:hover {
+  border-color: rgba(251,233,168,.6);
+  background: linear-gradient(120deg, #22132f, #140c1f);
+}
+
+/* 당첨 피드 행 */
+.win-row { transition: background .2s ease; border: 1px solid transparent; }
+.win-row:hover { background: rgba(230,196,99,.06); border-color: rgba(230,196,99,.2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rays, .float-slow { animation: none !important; }
+  .tile:hover, .enter-plate:hover { transform: none; }
+}
+
+/* ==========================================================
+   게임 화면 공용 크롬 — 각 게임의 고유한 화면은 건드리지 않고
+   상단 배너 / 결과 카드 / 조작부만 통일
+   ========================================================== */
+
+/* 상단 브랜드 배너 */
+.brand-bar {
+  filter: drop-shadow(0 0 14px rgba(230,196,99,.45));
+}
+
+/* 결과 카드 */
+.result-card {
+  background: linear-gradient(180deg, #1c1128, #0e0716);
+  box-shadow: 0 26px 70px rgba(0,0,0,.82), inset 0 1px 0 rgba(255,255,255,.1);
+}
+.result-card.is-win  { border: 2px solid rgba(251,233,168,.85); box-shadow: 0 26px 70px rgba(0,0,0,.82), 0 0 60px rgba(230,196,99,.42), inset 0 1px 0 rgba(255,255,255,.12); }
+.result-card.is-lose { border: 2px solid rgba(224,36,94,.7);   box-shadow: 0 26px 70px rgba(0,0,0,.82), 0 0 46px rgba(224,36,94,.3); }
+
+.result-scrim { background: rgba(6,3,12,.72); backdrop-filter: blur(8px); }
+
+/* 조작부 */
+.ctrl-panel {
+  background: linear-gradient(180deg, #170e21, #0d0814);
+  border-color: rgba(230,196,99,.16);
+}
+.ctrl-readout {
+  background: #08040f;
+  border: 1px solid rgba(230,196,99,.18);
+}
+
+/* 칩 버튼 */
+.chip-btn {
+  background: linear-gradient(180deg, #241733, #170e21);
+  border: 1px solid rgba(230,196,99,.28);
+  color: var(--ivory-dim);
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.chip-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #33204a, #1e1230);
+  border-color: rgba(251,233,168,.6);
+  color: var(--gold-hi);
+}
+.chip-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+.allin-btn {
+  background: linear-gradient(180deg, #d92a4e, #8c1128);
+  border: 1px solid #ff6b89;
+  color: #fff;
+  transition: filter .2s ease;
+}
+.allin-btn:hover:not(:disabled) { filter: brightness(1.18); }
+.allin-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+.clear-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.16);
+  color: var(--ivory-mute);
+  transition: color .2s ease, border-color .2s ease;
+}
+.clear-btn:hover:not(:disabled) { color: var(--ivory); border-color: rgba(255,255,255,.34); }
+.clear-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* 메인 실행 버튼 */
+.action-btn {
+  background: linear-gradient(180deg, var(--gold-hi), var(--gold) 46%, var(--gold-mid));
+  border: 1px solid var(--gold-hi);
+  color: #2a1a02;
+  font-weight: 900;
+  box-shadow: 0 6px 22px rgba(230,196,99,.34), inset 0 1px 0 rgba(255,255,255,.55);
+  transition: filter .2s ease, transform .2s ease;
+}
+.action-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+.action-btn:disabled {
+  background: #1a1026; border-color: rgba(255,255,255,.1);
+  color: var(--ivory-mute); box-shadow: none; cursor: not-allowed;
+}
+
+/* ==========================================================
+   교육 화면 — 카지노의 따뜻한 금색과 정반대인 차가운 재빛.
+   화면에서 빛나는 것은 상담 안내 하나뿐이어야 함.
+   ========================================================== */
+:root {
+  --ash-0: #07090d;
+  --ash-1: #0e1319;
+  --ash-2: #151c25;
+  --ash-line: #263141;
+  --ash-txt: #dfe6ee;
+  --ash-dim: #8996a8;
+  --ash-mute: #566375;
+  --blood:  #ff4d6a;
+}
+
+.edu-bg {
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(255,77,106,.09), transparent 60%),
+    linear-gradient(180deg, var(--ash-1), var(--ash-0));
+}
+.edu-panel {
+  background: var(--ash-2);
+  border: 1px solid var(--ash-line);
+}
+.edu-stat {
+  background: linear-gradient(180deg, #1a2029, #12171e);
+  border: 1px solid var(--ash-line);
+}
+.edu-band {
+  background: #7a1024;
+  border-bottom: 1px solid #a8203c;
+}
+
+/* 상담 안내 — 이 화면에서 유일하게 빛나는 요소 */
+.help-sign {
+  background: #0b1016;
+  border: 2px solid #7be3c4;
+  box-shadow:
+    0 0 0 1px rgba(123,227,196,.28),
+    0 0 40px rgba(123,227,196,.42),
+    inset 0 0 30px rgba(123,227,196,.09);
+}
+@keyframes help-breathe {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(123,227,196,.28), 0 0 34px rgba(123,227,196,.36), inset 0 0 30px rgba(123,227,196,.08); }
+  50%      { box-shadow: 0 0 0 1px rgba(123,227,196,.42), 0 0 58px rgba(123,227,196,.62), inset 0 0 34px rgba(123,227,196,.14); }
+}
+.help-sign { animation: help-breathe 4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .help-sign { animation: none; }
 }

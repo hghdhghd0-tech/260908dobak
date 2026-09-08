@@ -339,7 +339,7 @@ export const OstrichScreen: React.FC<OstrichScreenProps> = ({
           <button 
             onClick={handleStartRun}
             disabled={phase !== 'BETTING' || betAmount === 0 || !betChoice || !isBetValid}
-            className="sheen w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-lg py-2 rounded border-2 border-yellow-700 shadow-[0_0_14px_rgba(250,204,21,0.45),inset_0_1px_0_rgba(255,255,255,0.5)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap mt-1"
+            className="w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-lg py-2 rounded border-2 border-yellow-700 shadow-[0_0_10px_rgba(250,204,21,0.3)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap mt-1"
           >
             {phase === 'BETTING' 
               ? (isBetValid ? '좌우 베팅 확정 (타조 출발)' : '최소 베팅액을 맞춰주세요')
@@ -355,13 +355,13 @@ export const OstrichScreen: React.FC<OstrichScreenProps> = ({
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 1.2, opacity: 0 }}
-            className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            className="result-scrim absolute inset-0 z-50 flex items-center justify-center"
           >
-            <div className={`bg-white border-8 ${resultMessage.type === 'win' ? 'border-blue-600' : 'border-red-600'} p-10 rounded-2xl shadow-2xl text-center max-w-lg w-full transform -translate-y-10`}>
-              <h2 className={`text-6xl md:text-7xl font-black-han mb-6 ${resultMessage.type === 'win' ? 'text-blue-600' : 'text-red-600'}`}>
+            <div className={`result-card ${resultMessage.type === 'win' ? 'is-win' : 'is-lose'} p-10 rounded-2xl text-center max-w-lg w-full -translate-y-10`}>
+              <h2 className={`text-6xl md:text-7xl font-black-han mb-6 ${resultMessage.type === 'win' ? 'gold-text' : 'text-[#ff5c85]'}`}>
                 {resultMessage.type === 'win' ? '적중!' : '낙첨'}
               </h2>
-              <p className="text-3xl font-bold whitespace-pre-line text-black leading-snug">
+              <p className="text-3xl font-bold whitespace-pre-line text-[var(--ivory)] leading-snug">
                 {resultMessage.text}
               </p>
             </div>

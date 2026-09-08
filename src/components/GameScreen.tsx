@@ -108,8 +108,8 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   return (
     <div className="flex flex-col h-screen w-full bg-[#1b263b] font-sans text-black relative select-none overflow-hidden min-w-[800px]">
       {/* Top Header Bar */}
-      <div className="bg-[#0f1d3a] text-white px-3 py-2 flex justify-between items-center z-10 border-b border-[#2b3a5a]">
-        <span className="font-black-han text-lg md:text-xl tracking-wide text-yellow-300 drop-shadow-[0_0_10px_rgba(253,224,71,0.8)] animate-pulse">영천중학교 김진균선생님과 함께 도박예방</span>
+      <div className="lobby-panel text-white px-3 py-2 flex justify-between items-center z-10 border-b border-[rgba(230,196,99,.24)]">
+        <span className="brand-bar font-black-han gold-text text-lg md:text-xl tracking-wide">영천중학교 김진균선생님과 함께 도박예방</span>
       </div>
       
       <div className="flex flex-1 overflow-hidden">
@@ -213,11 +213,11 @@ export const GameScreen: React.FC<GameScreenProps> = ({
           </div>
 
           {/* Bottom Control Panel */}
-          <div className="h-[96px] bg-[#1a233a] flex items-stretch p-2 gap-2 text-white">
+          <div className="ctrl-panel h-[96px] flex items-stretch p-2 gap-2 text-white border-t">
             
             {/* Selected Horse Info */}
-            <div className="w-[160px] bg-[#0b162c] rounded border border-[#2b3a5a] flex items-center justify-center gap-2 relative">
-              <div className="absolute top-1 left-2 text-[10px] text-gray-400 font-bold">선택마</div>
+            <div className="ctrl-readout w-[160px] rounded-lg flex items-center justify-center gap-2 relative">
+              <div className="absolute top-1 left-2 text-[10px] text-[var(--ivory-mute)] font-bold">선택마</div>
               {selectedHorse ? (
                 <div className="flex items-center gap-2 mt-2">
                   <div className={`w-8 h-8 flex items-center justify-center font-bold text-lg border border-gray-600 ${HORSE_DATA.find(h=>h.id === selectedHorse)?.bg} ${HORSE_DATA.find(h=>h.id === selectedHorse)?.text}`}>
@@ -231,14 +231,14 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             </div>
 
             {/* Balances */}
-            <div className="w-[140px] bg-[#0b162c] rounded border border-[#2b3a5a] flex flex-col justify-center px-3 py-2 gap-1.5">
+            <div className="ctrl-readout w-[140px] rounded-lg flex flex-col justify-center px-3 py-2 gap-1.5">
               <div className="flex justify-between items-center">
-                <span className="text-gray-400 text-xs">보유</span>
-                <span className="text-[#ffeb3b] text-[15px] font-bold tracking-tight">{balance.toLocaleString()} 원</span>
+                <span className="text-[var(--ivory-mute)] text-xs">보유</span>
+                <span className="tnum gold-text text-[15px] font-bold tracking-tight">{balance.toLocaleString()} 원</span>
               </div>
-              <div className="flex justify-between items-center border-t border-[#2b3a5a] pt-1.5">
-                <span className="text-gray-400 text-xs">베팅</span>
-                <span className="text-[#4caf50] text-[15px] font-bold tracking-tight">{betAmount.toLocaleString()} 원</span>
+              <div className="flex justify-between items-center border-t border-[rgba(230,196,99,.18)] pt-1.5">
+                <span className="text-[var(--ivory-mute)] text-xs">베팅</span>
+                <span className="tnum text-[#3ee0b4] text-[15px] font-bold tracking-tight">{betAmount.toLocaleString()} 원</span>
               </div>
             </div>
             
@@ -250,7 +250,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                     key={chip}
                     onClick={() => handleBet(chip)}
                     disabled={phase !== 'BETTING' || balance < betAmount + chip || !selectedHorse}
-                    className="flex-1 bg-[#374151] hover:bg-[#4b5563] text-gray-200 text-sm font-bold h-full rounded border border-[#4b5563] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="chip-btn flex-1 text-sm font-bold h-full rounded-lg"
                   >
                     {(chip / 10000)}만
                   </button>
@@ -258,14 +258,14 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                 <button
                   onClick={() => handleBet(balance - betAmount)}
                   disabled={phase !== 'BETTING' || balance === betAmount || balance === 0 || !selectedHorse}
-                  className="flex-1 bg-[#d32f2f] hover:bg-[#b71c1c] text-white text-sm font-bold h-full rounded border border-[#b71c1c] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="allin-btn flex-1 text-sm font-bold h-full rounded-lg"
                 >
                   올인
                 </button>
                 <button
                   onClick={handleClearBet}
                   disabled={phase !== 'BETTING' || betAmount === 0}
-                  className="flex-1 bg-[#4b5563] hover:bg-[#6b7280] text-gray-300 text-sm font-bold h-full rounded border border-[#6b7280] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="clear-btn flex-1 text-sm font-bold h-full rounded-lg"
                 >
                   취소
                 </button>
@@ -274,7 +274,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               <button 
                 onClick={handleStartRace}
                 disabled={phase !== 'BETTING' || betAmount === 0 || !selectedHorse}
-                className="w-full bg-[#424242] hover:bg-[#616161] text-gray-200 font-bold text-sm h-[40px] rounded border border-[#616161] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                className="action-btn w-full text-sm h-[40px] rounded-lg flex items-center justify-center"
               >
                 {phase === 'BETTING' ? '경주 시작 (베팅 확정)' : '경주 진행 중...'}
               </button>
@@ -290,13 +290,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 1.2, opacity: 0 }}
-            className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+            className="result-scrim absolute inset-0 z-50 flex items-center justify-center"
           >
-            <div className={`bg-white border-8 ${resultMessage.type === 'win' ? 'border-blue-600' : 'border-red-600'} p-8 rounded-xl shadow-2xl text-center max-w-sm w-full transform -translate-y-10`}>
-              <h2 className={`text-5xl font-black-han mb-4 ${resultMessage.type === 'win' ? 'text-blue-600' : 'text-red-600'}`}>
+            <div className={`result-card ${resultMessage.type === 'win' ? 'is-win' : 'is-lose'} p-8 rounded-2xl text-center max-w-sm w-full -translate-y-10`}>
+              <h2 className={`text-5xl font-black-han mb-4 ${resultMessage.type === 'win' ? 'gold-text' : 'text-[#ff5c85]'}`}>
                 {resultMessage.type === 'win' ? '적중!' : '낙첨'}
               </h2>
-              <p className="text-xl font-bold whitespace-pre-line text-black leading-snug">
+              <p className="text-xl font-bold whitespace-pre-line text-[var(--ivory)] leading-snug">
                 {resultMessage.text}
               </p>
             </div>

@@ -10,14 +10,38 @@ interface IntroScreenProps {
   onStart: (mode: GameMode) => void;
 }
 
+const TTS_LINE = '체험 해보세요, 도박은 아니란 걸 알겁니다.';
+
+/** 원본과 동일한 문구·순서. 색은 이모지 뒤 후광에만 아주 옅게 씀 */
+const GAMES: {
+  mode: Exclude<GameMode, null>;
+  emoji: string;
+  title: string;
+  desc: string;
+  halo: string;
+}[] = [
+  { mode: 'OSTRICH', emoji: '🦤', title: '타조 게임',    desc: '좌/우를 맞혀라 1.95배', halo: '#3b82f6' },
+  { mode: 'RACE',    emoji: '🏇', title: '영천 경마장',  desc: '20초의 짜릿한 승부',    halo: '#22c55e' },
+  { mode: 'SLOT',    emoji: '🎰', title: '메가 슬롯',    desc: '터지면 인생 역전',      halo: '#a855f7' },
+  { mode: 'LADDER',  emoji: '🪜', title: '스피드 사다리', desc: '홀짝 배당 1.95배',      halo: '#ec4899' },
+];
+
+/** 카드 네 모서리의 금색 브래킷 */
+const Corners: React.FC = () => (
+  <>
+    <span className="corner top-2 left-2 border-t border-l rounded-tl-sm" />
+    <span className="corner top-2 right-2 border-t border-r rounded-tr-sm" />
+    <span className="corner bottom-2 left-2 border-b border-l rounded-bl-sm" />
+    <span className="corner bottom-2 right-2 border-b border-r rounded-br-sm" />
+  </>
+);
+
 export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
-  const [isMusicOn, setIsMusicOn] = useState(true); // Auto play true because user interacted to get here
+  const [isMusicOn, setIsMusicOn] = useState(true);
 
   useEffect(() => {
-    // Start music and custom TTS when entering this screen
     startLobbyMusic();
-    startPreventionTTS("체험 해보세요, 도박은 아니란 걸 알겁니다.", 4500);
-
+    startPreventionTTS(TTS_LINE, 4500);
     return () => {
       stopLobbyMusic();
       stopPreventionTTS();
@@ -31,7 +55,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
       setIsMusicOn(false);
     } else {
       startLobbyMusic();
-      startPreventionTTS("체험 해보세요, 도박은 아니란 걸 알겁니다.", 4500);
+      startPreventionTTS(TTS_LINE, 4500);
       setIsMusicOn(true);
     }
   };
@@ -43,104 +67,99 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(ellipse_at_50%_30%,#1a1030_0%,#0b0b10_65%)] text-white p-4 relative">
-      
-      {/* Music Toggle Button */}
-      <button 
-        onClick={toggleMusic} 
-        className={`absolute top-4 right-4 flex items-center gap-2 font-bold px-4 py-2 rounded-full text-sm transition-all border-2 z-50 ${
-          isMusicOn 
-            ? 'bg-yellow-500/20 text-yellow-400 border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] animate-pulse' 
-            : 'bg-gray-800 text-gray-400 border-gray-600 hover:bg-gray-700'
+    <div className="lobby-bg relative flex flex-col items-center justify-center min-h-screen text-[var(--ivory)] px-4 py-14 overflow-hidden">
+
+      {/* 음악 토글 — 문구 유지 */}
+      <button
+        onClick={toggleMusic}
+        aria-pressed={isMusicOn}
+        className={`absolute top-5 right-5 z-50 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold tracking-wide border transition-colors ${
+          isMusicOn
+            ? 'bg-[rgba(230,196,99,.1)] text-[var(--gold-hi)] border-[rgba(230,196,99,.55)]'
+            : 'bg-transparent text-[var(--ivory-mute)] border-[rgba(255,255,255,.12)] hover:text-[var(--ivory-dim)]'
         }`}
       >
-        {isMusicOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+        {isMusicOn ? <Volume2 size={14} /> : <VolumeX size={14} />}
         {isMusicOn ? '유혹의 소리 ON' : '유혹의 소리 OFF'}
       </button>
 
+      {/* 히어로 */}
       <motion.div
-        initial={{ y: -50, opacity: 0 }}
+        initial={{ y: -24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, type: "spring" }}
-        className="text-center mb-12"
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 text-center mb-12 max-w-3xl"
       >
-        <h1 className="text-6xl md:text-7xl font-black-han neon-text mb-2 text-pink-500 drop-shadow-[0_0_15px_rgba(236,72,153,0.5)]">
+        <div className="gold-rule w-56 mx-auto mb-5" />
+
+        <h1 className="font-black-han gold-text breathe leading-[0.95] tracking-tight text-[clamp(2.9rem,10vw,5.4rem)]">
           영천중학교 CASINO
         </h1>
-        <p className="text-2xl md:text-3xl text-yellow-300 mb-2 font-black-han tracking-wider drop-shadow-[0_0_15px_rgba(253,224,71,0.9)] animate-pulse">
-          도박중독 김진균선생님과 1336번으로 해결
-        </p>
-        <p className="text-xl md:text-2xl text-yellow-400 mb-2 font-bold tracking-widest mt-6">
-          신규 가입 축하금 300,000원 지급! (중1 몇달치 용돈)
+
+        <div className="gold-rule w-72 mx-auto mt-5 mb-6" />
+
+        {/* 상담 안내 리본 */}
+        <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-[rgba(230,196,99,.4)] bg-[rgba(230,196,99,.07)] backdrop-blur-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)] shrink-0" />
+          <p className="font-black-han text-[clamp(.95rem,3.4vw,1.45rem)] gold-text tracking-wide">
+            도박중독 김진균선생님과 1336번으로 해결
+          </p>
+        </div>
+
+        {/* 축하금 */}
+        <p className="mt-7 text-[clamp(1rem,3.6vw,1.4rem)] font-extrabold text-[var(--ivory)] tracking-wide">
+          신규 가입 축하금{' '}
+          <span className="tnum gold-text gold-glow font-black-han text-[1.22em] align-baseline">
+            300,000원
+          </span>{' '}
+          지급!
+          <span className="block mt-1.5 text-[.72em] font-bold text-[var(--ivory-dim)]">
+            (중1 몇달치 용돈)
+          </span>
         </p>
       </motion.div>
 
-      <div className="flex flex-col md:grid md:grid-cols-2 gap-6 w-full max-w-5xl px-4 z-10">
-        {/* Ostrich Game Button (Moved from bottom right to top left) */}
-        <motion.button
-          onClick={() => handleStart('OSTRICH')}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-blue-500 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(59,130,246,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="relative z-10 flex flex-col items-center justify-center h-full">
-            <span className="text-6xl mb-4 drop-shadow-lg">🦤</span>
-            <h2 className="text-3xl font-black-han text-blue-400 mb-2">타조 게임</h2>
-            <p className="text-gray-300 font-bold text-base">좌/우를 맞혀라 1.95배</p>
-          </div>
-        </motion.button>
+      {/* 게임 4종 — 원본 구조 유지 */}
+      <div className="relative z-10 flex flex-col md:grid md:grid-cols-2 gap-5 w-full max-w-5xl px-2">
+        {GAMES.map((g, i) => (
+          <motion.button
+            key={g.mode}
+            onClick={() => handleStart(g.mode)}
+            initial={{ y: 22, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.55, delay: 0.35 + i * 0.09, ease: [0.22, 1, 0.36, 1] }}
+            whileTap={{ scale: 0.985 }}
+            className="game-card sheen group relative rounded-2xl px-6 py-9 overflow-hidden"
+          >
+            <Corners />
 
-        {/* Race Game Button (Moved from bottom right to top right) */}
-        <motion.button
-          onClick={() => handleStart('RACE')}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-green-600 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(22,163,74,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="relative z-10 flex flex-col items-center justify-center h-full">
-            <span className="text-6xl mb-4 drop-shadow-lg">🏇</span>
-            <h2 className="text-3xl font-black-han text-green-400 mb-2">영천 경마장</h2>
-            <p className="text-gray-300 font-bold text-base">20초의 짜릿한 승부</p>
-          </div>
-        </motion.button>
+            <div className="relative z-10 flex flex-col items-center justify-center">
+              <div className="relative flex items-center justify-center mb-4">
+                <span className="emoji-halo" style={{ background: g.halo }} />
+                <span className="relative text-[3.6rem] leading-none drop-shadow-[0_6px_14px_rgba(0,0,0,.6)]">
+                  {g.emoji}
+                </span>
+              </div>
 
-        {/* Slot Game Button */}
-        <motion.button
-          onClick={() => handleStart('SLOT')}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-purple-600 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(147,51,234,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="relative z-10 flex flex-col items-center justify-center h-full">
-            <span className="text-6xl mb-4 drop-shadow-lg">🎰</span>
-            <h2 className="text-3xl font-black-han text-purple-400 mb-2">메가 슬롯</h2>
-            <p className="text-gray-300 font-bold text-base">터지면 인생 역전</p>
-          </div>
-        </motion.button>
+              <h2 className="font-black-han text-[1.85rem] leading-tight text-[var(--ivory)] mb-1.5">
+                {g.title}
+              </h2>
 
-        {/* Ladder Game Button (Moved from top right to bottom right) */}
-        <motion.button
-          onClick={() => handleStart('LADDER')}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-pink-500 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(236,72,153,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-pink-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          <div className="relative z-10 flex flex-col items-center justify-center h-full">
-            <span className="text-6xl mb-4 drop-shadow-lg">🪜</span>
-            <h2 className="text-3xl font-black-han text-pink-400 mb-2">스피드 사다리</h2>
-            <p className="text-gray-300 font-bold text-base">홀짝 배당 1.95배</p>
-          </div>
-        </motion.button>
+              <p className="text-[.95rem] font-bold tracking-wide text-[var(--ivory-dim)] group-hover:text-[var(--gold-hi)] transition-colors">
+                {g.desc}
+              </p>
+            </div>
+          </motion.button>
+        ))}
       </div>
-      
-      <div className="mt-12 text-sm text-gray-500">
-        * 19세 미만 청소년은 이용할 수 없습니다 (라는 경고문은 무시됩니다)
+
+      {/* 연령 경고 — 문구 유지 */}
+      <div className="relative z-10 mt-14 text-center">
+        <div className="gold-rule w-40 mx-auto mb-4 opacity-50" />
+        <p className="text-[.72rem] leading-relaxed text-[var(--ivory-mute)]">
+          * 19세 미만 청소년은 이용할 수 없습니다 (라는 경고문은 무시됩니다)
+        </p>
       </div>
     </div>
   );
 };
-

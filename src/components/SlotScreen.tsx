@@ -134,15 +134,15 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
   }, [spinning]);
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[radial-gradient(ellipse_at_50%_40%,#2a1748_0%,#120820_70%)] font-sans text-white relative select-none items-center justify-center">
+    <div className="flex flex-col h-screen w-full lobby-chrome font-sans text-[var(--ivory)] relative select-none items-center justify-center">
       
       {/* Header */}
-      <div className="absolute top-0 w-full bg-gradient-to-r from-purple-900 to-indigo-900 text-white text-center py-3 border-b-4 border-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.5)] z-10 flex justify-center items-center">
-        <h1 className="text-2xl md:text-4xl font-black-han tracking-widest text-yellow-300 drop-shadow-[0_0_12px_rgba(253,224,71,0.9)] animate-pulse">영천중학교 김진균선생님과 함께 도박예방</h1>
+      <div className="absolute top-0 w-full lobby-panel text-white text-center py-3 border-b border-[rgba(230,196,99,.28)] z-10 flex justify-center items-center">
+        <h1 className="brand-bar font-black-han gold-text text-2xl md:text-4xl tracking-widest">영천중학교 김진균선생님과 함께 도박예방</h1>
       </div>
 
       {/* Main Machine Container */}
-      <div className="w-full max-w-4xl bg-gradient-to-b from-gray-800 to-gray-950 rounded-3xl border-8 border-gray-700 p-8 bevel flex flex-col gap-8 mt-16">
+      <div className="w-full max-w-4xl rounded-3xl p-8 flex flex-col gap-8 mt-16" style={{background:"linear-gradient(180deg,#1c1128,#0e0716)",border:"6px solid rgba(230,196,99,.34)",boxShadow:"0 26px 70px rgba(0,0,0,.75)"}}>
         
         {/* Reels Area */}
         <div className="bg-gray-800 rounded-2xl border-4 border-gray-600 p-6 shadow-inner">
@@ -158,7 +158,7 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
                     initial={spinning[i] ? { y: -50, opacity: 0.5 } : { y: 0, opacity: 1 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={spinning[i] ? { duration: 0.1, repeat: Infinity } : { type: 'spring' }}
-                    className="text-6xl md:text-8xl bg-gradient-to-b from-white to-gray-200 text-black w-24 h-32 md:w-32 md:h-40 flex items-center justify-center rounded-xl border-4 border-gray-300 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),inset_0_-4px_8px_rgba(0,0,0,0.15),0_6px_12px_-4px_rgba(0,0,0,0.5)]"
+                    className="text-6xl md:text-8xl bg-white text-black w-24 h-32 md:w-32 md:h-40 flex items-center justify-center rounded-xl border-4 border-gray-300 shadow-inner"
                   >
                     {symbol}
                   </motion.div>
@@ -168,17 +168,17 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
         </div>
 
         {/* Control Panel (Similar compact style to Race) */}
-        <div className="bg-gray-800 border-t-4 border-gray-700 p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-inner">
+        <div className="ctrl-panel border p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4">
             
             {/* Balances */}
-            <div className="flex flex-col justify-center h-full gap-2 min-w-[160px] p-4 bg-black rounded-lg border border-gray-700 shadow-lg">
+            <div className="ctrl-readout flex flex-col justify-center h-full gap-2 min-w-[160px] p-4 rounded-lg">
               <div className="flex justify-between items-end">
-                <span className="text-gray-400 text-xs">보유 금액</span>
-                <span className="text-yellow-400 text-lg md:text-xl font-bold">{balance.toLocaleString()} 원</span>
+                <span className="text-[var(--ivory-mute)] text-xs">보유 금액</span>
+                <span className="tnum gold-text text-lg md:text-xl font-bold">{balance.toLocaleString()} 원</span>
               </div>
-              <div className="flex justify-between items-end border-t border-gray-800 pt-2">
-                <span className="text-gray-400 text-xs">현재 베팅</span>
-                <span className="text-green-400 text-lg md:text-xl font-bold">{betAmount.toLocaleString()} 원</span>
+              <div className="flex justify-between items-end border-t border-[rgba(230,196,99,.18)] pt-2">
+                <span className="text-[var(--ivory-mute)] text-xs">현재 베팅</span>
+                <span className="tnum text-[#3ee0b4] text-lg md:text-xl font-bold">{betAmount.toLocaleString()} 원</span>
               </div>
             </div>
             
@@ -190,7 +190,7 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
                     key={chip}
                     onClick={() => handleBet(chip)}
                     disabled={phase !== 'BETTING' || balance < betAmount + chip}
-                    className="flex-1 bg-gray-700 hover:bg-gray-600 text-white text-sm font-bold py-2 rounded border border-gray-500 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm whitespace-nowrap"
+                    className="chip-btn flex-1 text-sm font-bold py-2 rounded-lg whitespace-nowrap"
                   >
                     {(chip / 10000)}만
                   </button>
@@ -198,14 +198,14 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
                 <button
                   onClick={() => handleBet(balance - betAmount)}
                   disabled={phase !== 'BETTING' || balance === betAmount || balance === 0}
-                  className="flex-1 bg-red-800 hover:bg-red-700 text-white text-sm font-bold py-2 rounded border border-red-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm whitespace-nowrap"
+                  className="allin-btn flex-1 text-sm font-bold py-2 rounded-lg whitespace-nowrap"
                 >
                   MAX
                 </button>
                 <button
                   onClick={handleClearBet}
                   disabled={phase !== 'BETTING' || betAmount === 0}
-                  className="bg-gray-600 hover:bg-gray-500 text-white text-sm font-bold py-2 px-4 rounded border border-gray-500 disabled:opacity-40 disabled:cursor-not-allowed shadow-sm ml-auto whitespace-nowrap"
+                  className="clear-btn text-sm font-bold py-2 px-4 rounded-lg ml-auto whitespace-nowrap"
                 >
                   취소
                 </button>
@@ -214,7 +214,7 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
               <button 
                 onClick={handleSpin}
                 disabled={phase !== 'BETTING' || betAmount === 0}
-                className="sheen w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-black-han text-xl md:text-2xl py-3 rounded-lg border-2 border-pink-400 shadow-[0_0_20px_rgba(236,72,153,0.6),inset_0_1px_0_rgba(255,255,255,0.25)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all mt-2"
+                className="action-btn w-full font-black-han text-xl md:text-2xl py-3 rounded-lg mt-2"
               >
                 {phase === 'BETTING' ? 'SPIN !' : '회전 중...'}
               </button>
@@ -230,13 +230,13 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 1.2, opacity: 0 }}
-            className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="result-scrim absolute inset-0 z-50 flex items-center justify-center"
           >
-            <div className={`bg-gray-900 border-4 ${resultMessage.type === 'win' ? 'border-yellow-400' : 'border-red-600'} p-10 rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] text-center max-w-lg w-full`}>
-              <h2 className={`text-6xl md:text-7xl font-black-han mb-6 ${resultMessage.type === 'win' ? 'text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,1)]' : 'text-red-600'}`}>
+            <div className={`result-card ${resultMessage.type === 'win' ? 'is-win' : 'is-lose'} p-10 rounded-2xl text-center max-w-lg w-full`}>
+              <h2 className={`text-6xl md:text-7xl font-black-han mb-6 ${resultMessage.type === 'win' ? 'gold-text' : 'text-[#ff5c85]'}`}>
                 {resultMessage.type === 'win' ? 'WIN!' : 'LOSE'}
               </h2>
-              <p className="text-3xl font-bold whitespace-pre-line text-white">
+              <p className="text-3xl font-bold whitespace-pre-line text-[var(--ivory)]">
                 {resultMessage.text}
               </p>
             </div>

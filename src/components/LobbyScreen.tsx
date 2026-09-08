@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { 
-  Menu, Crown, Gamepad2, Trophy, Coins, User, 
-  ChevronRight, Bell, Search, Globe, LogIn, Volume2, VolumeX
+import {
+  Menu, Crown, Gamepad2, Trophy, User,
+  ChevronRight, Search, Globe, Volume2, VolumeX
 } from 'lucide-react';
 import { startLobbyMusic, stopLobbyMusic } from '../utils/casinoAudio';
 import { startPreventionTTS, stopPreventionTTS } from '../utils/ttsAudio';
@@ -11,10 +11,27 @@ interface LobbyScreenProps {
   onEnter: () => void;
 }
 
+const NAV = ['슬롯', '라이브 카지노', '스포츠', '프로모션'];
+
+const SIDE = [
+  { icon: Crown,   label: 'VIP',    gold: true },
+  { icon: Gamepad2, label: '게임',   gold: false },
+  { icon: Trophy,   label: '토너먼트', gold: false },
+];
+
+const POPULAR = [
+  { emoji: '🗿', name: '아즈텍 보물',   players: '1,245명 플레이중', art: 'linear-gradient(150deg,#1d4033,#0b1a14)', wide: false },
+  { emoji: '🐉', name: '불타는 드래곤', players: '980명 플레이중',   art: 'linear-gradient(150deg,#4a1420,#1a0709)', wide: false },
+  { emoji: '🎰', name: '메가 슬롯',     players: '1,520명 플레이중', art: 'linear-gradient(150deg,#3a1550,#150720)', wide: false },
+  { emoji: '🪜', name: '스피드 사다리', players: '412명 플레이중',   art: 'linear-gradient(150deg,#12305c,#060f1f)', wide: false },
+  { emoji: '🏇', name: '경마장 라이브', players: '885명 플레이중',   art: 'linear-gradient(150deg,#4d2a08,#170c02)', wide: true },
+];
+
+const LIVE = ['에볼루션 바카라', '라이브 룰렛', '블랙잭 VIP', '텍사스 홀덤'];
+
 export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
   const [isMusicOn, setIsMusicOn] = useState(false);
 
-  // Stop music if the user leaves the lobby screen
   useEffect(() => {
     return () => {
       stopLobbyMusic();
@@ -30,7 +47,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
       setIsMusicOn(false);
     } else {
       startLobbyMusic();
-      startPreventionTTS("도박은 자신에 대한 예의가 아닙니다.", 4500);
+      startPreventionTTS('도박은 자신에 대한 예의가 아닙니다.', 4500);
       setIsMusicOn(true);
     }
   };
@@ -46,290 +63,256 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
     { name: '윤*석', amount: '₩21,000,000', game: '아즈텍 보물' },
   ];
 
+  const WinRow: React.FC<{ w: typeof fakeWinners[0]; when: string }> = ({ w, when }) => (
+    <div className="win-row flex items-center gap-3 p-3 rounded-xl cursor-pointer" onClick={onEnter}>
+      <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border border-[rgba(230,196,99,.28)] bg-[#1a1026]">
+        <User size={15} className="text-[var(--ivory-mute)]" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex justify-between items-center mb-0.5">
+          <span className="text-sm font-bold text-[var(--ivory)] truncate">{w.name}</span>
+          <span className="text-[10px] text-[var(--ivory-mute)]">{when}</span>
+        </div>
+        <div className="flex justify-between items-center gap-2">
+          <span className="text-[11px] text-[var(--ivory-mute)] truncate">{w.game}</span>
+          <span className="tnum text-sm font-bold gold-text">{w.amount}</span>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="flex flex-col h-screen w-full bg-[#0a0d14] text-white font-sans overflow-hidden select-none">
-      {/* Top Navbar */}
-      <div className="h-16 bg-[#121620]/85 glass border-b border-[#1f2636] flex items-center justify-between px-4 z-20">
+    <div className="lobby-chrome flex flex-col h-screen w-full text-[var(--ivory)] overflow-hidden select-none">
+
+      {/* ── 상단 내비 ─────────────────────────────── */}
+      <div className="h-16 lobby-panel border-b flex items-center justify-between px-4 z-20 shrink-0">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2 cursor-pointer" onClick={onEnter}>
-            <Menu className="text-gray-400 hover:text-white" size={24} />
-            <div className="flex flex-col items-start leading-none ml-2">
-              <span className="text-xl md:text-2xl font-bold text-yellow-400 font-black-han tracking-wide">영천중 카지노</span>
-            </div>
+            <Menu className="text-[var(--ivory-mute)] hover:text-[var(--ivory)] transition-colors" size={22} />
+            <span className="ml-2 font-black-han gold-text text-xl md:text-2xl tracking-tight">
+              영천중 카지노
+            </span>
           </div>
-          <div className="hidden md:flex items-center gap-6 ml-6 text-sm font-bold text-gray-300">
-            <span className="text-yellow-400 border-b-2 border-yellow-400 py-5 cursor-pointer">슬롯</span>
-            <span className="hover:text-white cursor-pointer">라이브 카지노</span>
-            <span className="hover:text-white cursor-pointer">스포츠</span>
-            <span className="hover:text-white cursor-pointer">프로모션</span>
+          <div className="hidden md:flex items-center gap-6 ml-6 text-sm font-bold">
+            {NAV.map((n, i) => (
+              <span key={n} className={`nav-link cursor-pointer ${i === 0 ? 'is-active' : ''}`}>
+                {n}
+              </span>
+            ))}
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={toggleMusic} 
-            className={`hidden md:flex items-center gap-2 font-bold px-4 py-1.5 rounded-full text-sm transition-all border-2 ${
-              isMusicOn 
-                ? 'bg-yellow-500/20 text-yellow-400 border-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)] animate-pulse' 
-                : 'bg-gray-800 text-gray-400 border-gray-600 hover:bg-gray-700'
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleMusic}
+            aria-pressed={isMusicOn}
+            className={`hidden md:flex items-center gap-2 font-bold px-4 py-1.5 rounded-full text-xs border transition-colors ${
+              isMusicOn
+                ? 'bg-[rgba(230,196,99,.12)] text-[var(--gold-hi)] border-[rgba(230,196,99,.6)]'
+                : 'bg-transparent text-[var(--ivory-mute)] border-[rgba(255,255,255,.12)] hover:text-[var(--ivory-dim)]'
             }`}
           >
-            {isMusicOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            {isMusicOn ? <Volume2 size={14} /> : <VolumeX size={14} />}
             {isMusicOn ? '유혹의 소리 ON' : '유혹의 소리 OFF'}
           </button>
-          <button onClick={onEnter} className="hidden sm:flex items-center justify-center bg-gradient-to-b from-yellow-300 to-yellow-600 text-black font-bold px-6 py-1.5 rounded-full text-sm hover:from-yellow-200 hover:to-yellow-500 transition-all shadow-[0_0_10px_rgba(234,179,8,0.3)]">
+
+          <button
+            onClick={onEnter}
+            className="hidden sm:flex items-center justify-center font-bold px-6 py-1.5 rounded-full text-sm text-[#2a1a02] transition-transform hover:scale-105"
+            style={{
+              background: 'linear-gradient(180deg,#fbe9a8,#e6c463 46%,#b8891f)',
+              boxShadow: '0 4px 16px rgba(230,196,99,.34), inset 0 1px 0 rgba(255,255,255,.5)',
+            }}
+          >
             로그인
           </button>
-          <div className="hidden lg:flex items-center gap-1 text-gray-400 text-sm">
-            <Globe size={16} /> 한국어
+
+          <div className="hidden lg:flex items-center gap-1 text-[var(--ivory-mute)] text-xs">
+            <Globe size={14} /> 한국어
           </div>
-          <div className="flex items-center gap-2 border-l border-[#1f2636] pl-4">
-             <div className="flex flex-col items-end leading-tight">
-               <span className="text-xs text-gray-400">Guest_8912</span>
-               <span className="text-sm font-bold text-yellow-400">₩0</span>
-             </div>
-             <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center border border-gray-600">
-               <User size={18} className="text-gray-400" />
-             </div>
+
+          <div className="flex items-center gap-2 border-l border-[rgba(230,196,99,.16)] pl-3">
+            <div className="flex flex-col items-end leading-tight">
+              <span className="text-[10px] text-[var(--ivory-mute)]">Guest_8912</span>
+              <span className="tnum text-sm font-bold gold-text">₩0</span>
+            </div>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center border border-[rgba(230,196,99,.28)] bg-[#1a1026]">
+              <User size={16} className="text-[var(--ivory-mute)]" />
+            </div>
           </div>
         </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden relative">
-        {/* Left Sidebar */}
-        <div className="hidden sm:flex w-20 flex-col items-center bg-[#121620]/85 glass border-r border-[#1f2636] py-6 gap-8 z-10">
-          <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={onEnter}>
-            <Crown size={24} className="text-yellow-400 group-hover:scale-110 transition-transform" />
-            <span className="text-[10px] text-gray-400 group-hover:text-yellow-400">VIP</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={onEnter}>
-            <Gamepad2 size={24} className="text-gray-400 group-hover:text-white group-hover:scale-110 transition-transform" />
-            <span className="text-[10px] text-gray-400 group-hover:text-white">게임</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={onEnter}>
-            <Trophy size={24} className="text-gray-400 group-hover:text-white group-hover:scale-110 transition-transform" />
-            <span className="text-[10px] text-gray-400 group-hover:text-white">토너먼트</span>
-          </div>
+
+        {/* ── 좌측 사이드바 ───────────────────────── */}
+        <div className="hidden sm:flex w-20 flex-col items-center lobby-panel border-r py-6 gap-8 z-10 shrink-0">
+          {SIDE.map(({ icon: Icon, label, gold }) => (
+            <div key={label} className="flex flex-col items-center gap-1 cursor-pointer group" onClick={onEnter}>
+              <Icon
+                size={22}
+                className={`transition-transform group-hover:scale-110 ${
+                  gold ? 'text-[var(--gold)]' : 'text-[var(--ivory-mute)] group-hover:text-[var(--ivory)]'
+                }`}
+              />
+              <span className={`text-[10px] ${gold ? 'text-[var(--gold)]' : 'text-[var(--ivory-mute)] group-hover:text-[var(--ivory)]'}`}>
+                {label}
+              </span>
+            </div>
+          ))}
           <div className="flex flex-col items-center gap-1 cursor-pointer group mt-auto" onClick={onEnter}>
-            <Search size={24} className="text-gray-400 group-hover:text-white group-hover:scale-110 transition-transform" />
-            <span className="text-[10px] text-gray-400 group-hover:text-white">검색</span>
+            <Search size={22} className="text-[var(--ivory-mute)] group-hover:text-[var(--ivory)] transition-transform group-hover:scale-110" />
+            <span className="text-[10px] text-[var(--ivory-mute)] group-hover:text-[var(--ivory)]">검색</span>
           </div>
         </div>
 
-        {/* Main Content Area */}
+        {/* ── 본문 ────────────────────────────────── */}
         <div className="flex-1 overflow-y-auto pb-20 custom-scrollbar">
-          <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-8">
-            
-            {/* Hero Banner (Mimicking the flashy DAILY WINS image) */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+          <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto space-y-10">
+
+            {/* 히어로 */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              className="sheen-auto relative w-full min-h-[350px] md:min-h-[450px] py-12 rounded-2xl overflow-hidden cursor-pointer group shadow-[0_10px_40px_rgba(0,0,0,0.8),inset_0_0_140px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.15)] border-2 border-yellow-400/60 bg-[#2d1b54] flex flex-col justify-center items-center"
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               onClick={onEnter}
+              className="hero-stage relative w-full min-h-[350px] md:min-h-[470px] py-12 rounded-2xl overflow-hidden cursor-pointer flex flex-col justify-center items-center"
             >
-              {/* Flashy background - Purple radial sunburst effect */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-fuchsia-500 via-purple-800 to-[#140833] opacity-95"></div>
-              
-              {/* Sunburst rays pattern */}
-              <div className="absolute inset-0 opacity-20 bg-[repeating-conic-gradient(from_0deg,transparent_0deg,transparent_15deg,#ffffff_15deg,#ffffff_30deg)] mix-blend-overlay animate-[spin_60s_linear_infinite]"></div>
+              <div className="hero-rays absolute -inset-1/2" />
+              <div className="hero-vignette absolute inset-0" />
 
-              {/* Decorative elements to mimic the sweet/pig aesthetic (using emojis instead of characters) */}
-              <div className="absolute top-12 left-10 md:left-20 text-6xl md:text-8xl drop-shadow-2xl animate-pulse delay-75 z-0">💎</div>
-              <div className="absolute top-20 right-10 md:right-24 text-6xl md:text-8xl drop-shadow-2xl animate-pulse delay-300 z-0">🍬</div>
-              <div className="absolute bottom-10 left-1/4 text-4xl drop-shadow-lg opacity-80 z-0">🍭</div>
-              <div className="absolute top-1/4 right-1/3 text-5xl drop-shadow-lg opacity-80 animate-bounce z-0">🪙</div>
+              {/* 장식 이모지 */}
+              <div className="float-slow absolute top-12 left-8 md:left-20 text-6xl md:text-8xl drop-shadow-2xl z-0">💎</div>
+              <div className="float-slow absolute top-20 right-8 md:right-24 text-6xl md:text-8xl drop-shadow-2xl z-0" style={{ animationDelay: '1.6s' }}>🍬</div>
+              <div className="float-slow absolute bottom-10 left-1/4 text-4xl drop-shadow-lg opacity-80 z-0" style={{ animationDelay: '3.1s' }}>🍭</div>
+              <div className="float-slow absolute top-1/4 right-1/3 text-5xl drop-shadow-lg opacity-80 z-0" style={{ animationDelay: '4.4s' }}>🪙</div>
 
-              {/* Center Content */}
-              <div className="relative z-10 p-4 md:p-8 flex flex-col justify-center items-center text-center w-full max-w-5xl">
-                
-                {/* DAILY WINS Logo Mockup */}
-                <div className="relative mb-4 mt-4">
-                  <Crown size={56} className="absolute -top-12 left-1/2 -translate-x-1/2 text-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,1)] z-20" fill="currentColor" />
-                  <div className="bg-gradient-to-b from-red-600 to-red-900 border-4 border-yellow-400 px-8 py-2 rounded-xl shadow-2xl relative z-10 transform -rotate-2">
-                    <h2 className="text-4xl md:text-5xl font-black-han italic text-white drop-shadow-md tracking-wider">DAILY<br/><span className="text-yellow-300">WINS</span></h2>
+              <div className="relative z-10 px-4 md:px-8 flex flex-col justify-center items-center text-center w-full max-w-5xl">
+
+                {/* DAILY WINS */}
+                <div className="relative mb-5 mt-6">
+                  <Crown
+                    size={52}
+                    fill="currentColor"
+                    className="absolute -top-11 left-1/2 -translate-x-1/2 text-[var(--gold-hi)] drop-shadow-[0_0_18px_rgba(230,196,99,.95)] z-20"
+                  />
+                  <div className="plaque px-9 py-2.5 rounded-xl relative z-10 -rotate-2">
+                    <h2 className="font-black-han italic text-4xl md:text-5xl text-white leading-[1.05] tracking-wider drop-shadow-[0_3px_4px_rgba(0,0,0,.6)]">
+                      DAILY<br />
+                      <span className="text-[var(--gold-hi)]">WINS</span>
+                    </h2>
                   </div>
                 </div>
 
-                {/* Pink Ribbon - Daily Cash Prizes */}
-                <div className="bg-gradient-to-b from-pink-400 to-pink-600 border-2 border-pink-200 text-white font-bold text-base md:text-2xl px-10 py-2 rounded-full shadow-[0_5px_15px_rgba(219,39,119,0.6)] mb-4 z-20">
+                {/* 핑크 리본 */}
+                <div className="ribbon-pink text-white font-bold text-base md:text-2xl px-10 py-2 rounded-full mb-5 z-20">
                   매일마다 캐쉬 프라이즈 ⭐
                 </div>
 
-                {/* MASSIVE GOLD TEXT: ₩1,650,000,000 */}
-                <div className="relative z-20 w-full px-2 mb-6">
-                  <h1 className="gold-foil text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-black-han tracking-tighter w-full text-center py-2 leading-none">
+                {/* 잭팟 */}
+                <div className="relative z-20 w-full px-2 mb-7">
+                  <h1 className="jackpot tnum font-black-han text-center leading-none tracking-tighter text-[clamp(2.6rem,11vw,7rem)] py-2">
                     ₩1,650,000,000
                   </h1>
                 </div>
 
-                {/* Flashy Neon Sign - Gambling Prevention & Click CTA */}
-                <div className="border-4 border-yellow-400 px-8 py-4 rounded-full shadow-[0_0_35px_rgba(253,224,71,1)] z-20 animate-pulse bg-black/80 backdrop-blur-md flex flex-col items-center justify-center gap-2 hover:scale-110 transition-transform cursor-pointer w-full max-w-4xl">
-                  <span className="text-white font-sans font-black text-2xl md:text-3xl lg:text-4xl tracking-tight drop-shadow-[0_0_12px_rgba(255,255,255,1)] text-center leading-tight whitespace-nowrap">
-                    영천중학교 <span className="text-pink-500 mx-1 drop-shadow-[0_0_20px_rgba(236,72,153,1)]">김진균선생님</span>과 도박예방
+                {/* 입장 안내 */}
+                <div className="enter-plate rounded-full px-8 py-4 z-20 flex flex-col items-center justify-center gap-2 cursor-pointer w-full max-w-4xl">
+                  <span className="font-black text-xl md:text-3xl lg:text-4xl tracking-tight text-white text-center leading-tight whitespace-nowrap drop-shadow-[0_0_14px_rgba(255,255,255,.55)]">
+                    영천중학교 <span className="mx-1 text-[#ff6bb0] drop-shadow-[0_0_18px_rgba(255,107,176,.9)]">김진균선생님</span>과 도박예방
                   </span>
-                  <span className="text-yellow-300 font-bold text-base md:text-xl animate-bounce mt-2 bg-black/50 px-6 py-2 rounded-full border border-yellow-500/50 whitespace-nowrap">
+                  <span className="mt-1.5 text-sm md:text-lg font-bold text-[var(--gold-hi)] bg-[rgba(230,196,99,.1)] border border-[rgba(230,196,99,.4)] px-6 py-2 rounded-full whitespace-nowrap">
                     👆 여기를 클릭하여 바로 입장하세요! 👆
                   </span>
                 </div>
-
               </div>
-              
-              {/* Fake X Multiplier badge bottom right */}
-              <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 bg-black border-4 border-yellow-500 w-24 h-24 md:w-28 md:h-28 rounded-full flex flex-col items-center justify-center shadow-[0_0_20px_rgba(234,179,8,0.6)] z-30 transform rotate-12">
-                <span className="text-yellow-400 font-black-han text-4xl leading-none">X</span>
-                <span className="text-white font-bold text-xs leading-tight text-center mt-1">PRIZE<br/>MULTIPLIER</span>
+
+              {/* 배수 뱃지 */}
+              <div className="mult-badge absolute bottom-6 right-6 md:bottom-8 md:right-8 w-24 h-24 md:w-28 md:h-28 rounded-full flex flex-col items-center justify-center z-30 rotate-12">
+                <span className="font-black-han gold-text text-4xl leading-none">X</span>
+                <span className="text-white font-bold text-[10px] leading-tight text-center mt-1">
+                  PRIZE<br />MULTIPLIER
+                </span>
               </div>
             </motion.div>
 
-            {/* Popular Games Section */}
+            {/* 인기 게임 */}
             <div>
               <div className="flex justify-between items-end mb-4">
-                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-                  인기 게임 <span className="text-yellow-500 text-sm">🔥</span>
+                <h2 className="font-black-han text-xl md:text-2xl flex items-center gap-2 text-[var(--ivory)]">
+                  인기 게임 <span className="text-base">🔥</span>
                 </h2>
-                <span className="text-sm text-gray-400 flex items-center cursor-pointer hover:text-white" onClick={onEnter}>
-                  더보기 <ChevronRight size={16} />
+                <span
+                  className="text-sm text-[var(--ivory-mute)] flex items-center cursor-pointer hover:text-[var(--gold-hi)] transition-colors"
+                  onClick={onEnter}
+                >
+                  더보기 <ChevronRight size={15} />
                 </span>
               </div>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                {/* Game Card 1 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
-                  <div className="aspect-[4/3] bg-gradient-to-br from-green-900 to-black relative p-4 flex flex-col items-center justify-center">
-                    <span className="text-5xl drop-shadow-lg mb-2">🗿</span>
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
+                {POPULAR.map((g) => (
+                  <div
+                    key={g.name}
+                    onClick={onEnter}
+                    className={`tile group relative rounded-xl overflow-hidden cursor-pointer ${g.wide ? 'hidden lg:block' : ''}`}
+                  >
+                    <div
+                      className="tile-art aspect-[4/3] flex items-center justify-center"
+                      style={{ background: g.art }}
+                    >
+                      <span className="relative z-10 text-5xl drop-shadow-[0_6px_14px_rgba(0,0,0,.7)] transition-transform duration-300 group-hover:scale-110">
+                        {g.emoji}
+                      </span>
+                    </div>
+                    <div className="p-3 text-center">
+                      <h3 className="font-bold text-[var(--ivory)] text-sm">{g.name}</h3>
+                      <p className="text-[11px] text-[var(--ivory-mute)] mt-1">{g.players}</p>
+                      <button className="play-btn mt-3 w-full py-1.5 rounded-lg text-sm font-bold">
+                        Play
+                      </button>
+                    </div>
                   </div>
-                  <div className="p-3 text-center bg-[#161a23]">
-                    <h3 className="font-bold text-gray-200">아즈텍 보물</h3>
-                    <p className="text-xs text-gray-500 mt-1">1,245명 플레이중</p>
-                    <button className="mt-3 w-full bg-[#2b354a] text-yellow-400 py-1.5 rounded-lg text-sm font-bold group-hover:bg-yellow-500 group-hover:text-black transition-colors">Play</button>
-                  </div>
-                </div>
-
-                {/* Game Card 2 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
-                  <div className="aspect-[4/3] bg-gradient-to-br from-red-900 to-black relative p-4 flex flex-col items-center justify-center">
-                    <span className="text-5xl drop-shadow-lg mb-2">🐉</span>
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                  </div>
-                  <div className="p-3 text-center bg-[#161a23]">
-                    <h3 className="font-bold text-gray-200">불타는 드래곤</h3>
-                    <p className="text-xs text-gray-500 mt-1">980명 플레이중</p>
-                    <button className="mt-3 w-full bg-[#2b354a] text-yellow-400 py-1.5 rounded-lg text-sm font-bold group-hover:bg-yellow-500 group-hover:text-black transition-colors">Play</button>
-                  </div>
-                </div>
-
-                {/* Game Card 3 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
-                  <div className="aspect-[4/3] bg-gradient-to-br from-purple-900 to-black relative p-4 flex flex-col items-center justify-center">
-                    <span className="text-5xl drop-shadow-lg mb-2">🎰</span>
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                  </div>
-                  <div className="p-3 text-center bg-[#161a23]">
-                    <h3 className="font-bold text-gray-200">메가 슬롯</h3>
-                    <p className="text-xs text-gray-500 mt-1">1,520명 플레이중</p>
-                    <button className="mt-3 w-full bg-[#2b354a] text-yellow-400 py-1.5 rounded-lg text-sm font-bold group-hover:bg-yellow-500 group-hover:text-black transition-colors">Play</button>
-                  </div>
-                </div>
-
-                {/* Game Card 4 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
-                  <div className="aspect-[4/3] bg-gradient-to-br from-blue-900 to-black relative p-4 flex flex-col items-center justify-center">
-                    <span className="text-5xl drop-shadow-lg mb-2">🪜</span>
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                  </div>
-                  <div className="p-3 text-center bg-[#161a23]">
-                    <h3 className="font-bold text-gray-200">스피드 사다리</h3>
-                    <p className="text-xs text-gray-500 mt-1">412명 플레이중</p>
-                    <button className="mt-3 w-full bg-[#2b354a] text-yellow-400 py-1.5 rounded-lg text-sm font-bold group-hover:bg-yellow-500 group-hover:text-black transition-colors">Play</button>
-                  </div>
-                </div>
-
-                {/* Game Card 5 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen hidden lg:block">
-                  <div className="aspect-[4/3] bg-gradient-to-br from-orange-900 to-black relative p-4 flex flex-col items-center justify-center">
-                    <span className="text-5xl drop-shadow-lg mb-2">🏇</span>
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
-                  </div>
-                  <div className="p-3 text-center bg-[#161a23]">
-                    <h3 className="font-bold text-gray-200">경마장 라이브</h3>
-                    <p className="text-xs text-gray-500 mt-1">885명 플레이중</p>
-                    <button className="mt-3 w-full bg-[#2b354a] text-yellow-400 py-1.5 rounded-lg text-sm font-bold group-hover:bg-yellow-500 group-hover:text-black transition-colors">Play</button>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* Live Casino Section (Compact) */}
+            {/* 실시간 카지노 */}
             <div>
               <div className="flex justify-between items-end mb-4">
-                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
-                  실시간 카지노
-                </h2>
+                <h2 className="font-black-han text-xl md:text-2xl text-[var(--ivory)]">실시간 카지노</h2>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                 <div onClick={onEnter} className="h-24 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl flex items-center justify-center cursor-pointer border border-gray-700 hover:border-yellow-500/50 transition-colors">
-                    <span className="text-gray-300 font-bold">에볼루션 바카라</span>
-                 </div>
-                 <div onClick={onEnter} className="h-24 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl flex items-center justify-center cursor-pointer border border-gray-700 hover:border-yellow-500/50 transition-colors">
-                    <span className="text-gray-300 font-bold">라이브 룰렛</span>
-                 </div>
-                 <div onClick={onEnter} className="h-24 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl flex items-center justify-center cursor-pointer border border-gray-700 hover:border-yellow-500/50 transition-colors">
-                    <span className="text-gray-300 font-bold">블랙잭 VIP</span>
-                 </div>
-                 <div onClick={onEnter} className="h-24 bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl flex items-center justify-center cursor-pointer border border-gray-700 hover:border-yellow-500/50 transition-colors">
-                    <span className="text-gray-300 font-bold">텍사스 홀덤</span>
-                 </div>
+                {LIVE.map((t) => (
+                  <div
+                    key={t}
+                    onClick={onEnter}
+                    className="live-tile h-24 rounded-xl flex items-center justify-center cursor-pointer"
+                  >
+                    <span className="font-bold text-[var(--ivory-dim)] text-sm">{t}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
           </div>
         </div>
 
-        {/* Right Sidebar (Live Winners Feed) */}
-        <div className="hidden xl:flex w-72 flex-col bg-[#121620]/85 glass border-l border-[#1f2636] z-10">
-          <div className="flex items-center justify-between p-4 border-b border-[#1f2636]">
-            <span className="text-gray-300 font-bold">실시간 당첨 현황</span>
-            <div className="flex bg-[#1a1f2e] rounded-lg p-1">
-              <span className="px-3 py-1 bg-[#2b354a] rounded-md text-xs font-bold text-white">최근</span>
-              <span className="px-3 py-1 text-xs text-gray-400">고액</span>
+        {/* ── 우측 당첨 피드 ──────────────────────── */}
+        <div className="hidden xl:flex w-72 flex-col lobby-panel border-l z-10 shrink-0">
+          <div className="flex items-center justify-between p-4 border-b border-[rgba(230,196,99,.14)]">
+            <span className="font-bold text-[var(--ivory)] text-sm">실시간 당첨 현황</span>
+            <div className="flex rounded-lg p-1 bg-[#1a1026] border border-[rgba(230,196,99,.14)]">
+              <span className="px-3 py-1 rounded-md text-[11px] font-bold text-[#2a1a02] bg-[var(--gold)]">최근</span>
+              <span className="px-3 py-1 text-[11px] text-[var(--ivory-mute)]">고액</span>
             </div>
           </div>
           <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
-            {fakeWinners.map((winner, idx) => (
-              <div key={idx} className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1a1f2e] transition-colors cursor-pointer" onClick={onEnter}>
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center border border-gray-600 flex-shrink-0">
-                  <User size={16} className="text-gray-400" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center mb-0.5">
-                    <span className="text-sm font-bold text-gray-200 truncate">{winner.name}</span>
-                    <span className="text-xs text-gray-500">방금 전</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-400 truncate">{winner.game}</span>
-                    <span className="text-sm font-bold text-green-400">{winner.amount}</span>
-                  </div>
-                </div>
-              </div>
+            {fakeWinners.map((w, i) => (
+              <WinRow key={i} w={w} when="방금 전" />
             ))}
-            {/* Duplicate for visual fill */}
-            {fakeWinners.map((winner, idx) => (
-              <div key={`dup-${idx}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1a1f2e] transition-colors cursor-pointer" onClick={onEnter}>
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center border border-gray-600 flex-shrink-0">
-                  <User size={16} className="text-gray-400" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center mb-0.5">
-                    <span className="text-sm font-bold text-gray-200 truncate">{winner.name}</span>
-                    <span className="text-xs text-gray-500">{idx + 2}분 전</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-400 truncate">{winner.game}</span>
-                    <span className="text-sm font-bold text-green-400">{winner.amount}</span>
-                  </div>
-                </div>
-              </div>
+            {fakeWinners.map((w, i) => (
+              <WinRow key={`d-${i}`} w={w} when={`${i + 2}분 전`} />
             ))}
           </div>
         </div>
