@@ -43,7 +43,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[#111] text-white p-4 relative">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(ellipse_at_50%_30%,#1a1030_0%,#0b0b10_65%)] text-white p-4 relative">
       
       {/* Music Toggle Button */}
       <button 
@@ -81,7 +81,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
           onClick={() => handleStart('OSTRICH')}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group relative bg-gray-900 border-2 border-blue-500 rounded-2xl p-6 overflow-hidden shadow-[0_0_30px_rgba(59,130,246,0.3)] transition-all"
+          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-blue-500 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(59,130,246,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
         >
           <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative z-10 flex flex-col items-center justify-center h-full">
@@ -96,7 +96,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
           onClick={() => handleStart('RACE')}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group relative bg-gray-900 border-2 border-green-600 rounded-2xl p-6 overflow-hidden shadow-[0_0_30px_rgba(22,163,74,0.3)] transition-all"
+          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-green-600 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(22,163,74,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
         >
           <div className="absolute inset-0 bg-gradient-to-t from-green-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative z-10 flex flex-col items-center justify-center h-full">
@@ -111,7 +111,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
           onClick={() => handleStart('SLOT')}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group relative bg-gray-900 border-2 border-purple-600 rounded-2xl p-6 overflow-hidden shadow-[0_0_30px_rgba(147,51,234,0.3)] transition-all"
+          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-purple-600 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(147,51,234,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
         >
           <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative z-10 flex flex-col items-center justify-center h-full">
@@ -126,7 +126,7 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
           onClick={() => handleStart('LADDER')}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="group relative bg-gray-900 border-2 border-pink-500 rounded-2xl p-6 overflow-hidden shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-all"
+          className="sheen group relative bg-gradient-to-b from-gray-800 to-gray-950 border-2 border-pink-500 rounded-2xl p-6 overflow-hidden shadow-[0_0_38px_rgba(236,72,153,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] transition-all"
         >
           <div className="absolute inset-0 bg-gradient-to-t from-pink-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
           <div className="relative z-10 flex flex-col items-center justify-center h-full">

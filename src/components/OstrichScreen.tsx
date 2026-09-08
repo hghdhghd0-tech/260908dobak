@@ -339,7 +339,7 @@ export const OstrichScreen: React.FC<OstrichScreenProps> = ({
           <button 
             onClick={handleStartRun}
             disabled={phase !== 'BETTING' || betAmount === 0 || !betChoice || !isBetValid}
-            className="w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-lg py-2 rounded border-2 border-yellow-700 shadow-[0_0_10px_rgba(250,204,21,0.3)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap mt-1"
+            className="sheen w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-lg py-2 rounded border-2 border-yellow-700 shadow-[0_0_14px_rgba(250,204,21,0.45),inset_0_1px_0_rgba(255,255,255,0.5)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap mt-1"
           >
             {phase === 'BETTING' 
               ? (isBetValid ? '좌우 베팅 확정 (타조 출발)' : '최소 베팅액을 맞춰주세요')
