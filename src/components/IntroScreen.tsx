@@ -99,9 +99,12 @@ export const IntroScreen: React.FC<IntroScreenProps> = ({ onStart }) => {
         <div className="gold-rule w-72 mx-auto mt-5 mb-6" />
 
         {/* 상담 안내 리본 */}
-        <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-[rgba(230,196,99,.4)] bg-[rgba(230,196,99,.07)] backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--gold)] shrink-0" />
-          <p className="font-black-han text-[clamp(.95rem,3.4vw,1.45rem)] gold-text tracking-wide">
+        <div className="inline-flex items-center gap-3 px-7 py-3.5 rounded-full border border-[rgba(230,196,99,.4)] bg-[rgba(230,196,99,.07)] backdrop-blur-sm">
+          <span className="w-2 h-2 rounded-full bg-[var(--gold)] shrink-0" />
+          <p
+            className="font-black-han text-[clamp(1.25rem,4.8vw,2.15rem)] gold-text tracking-wide"
+            style={{ filter: 'drop-shadow(0 1px 1px rgba(0,0,0,.6)) drop-shadow(0 0 16px rgba(230,196,99,.3))' }}
+          >
             도박중독 김진균선생님과 1336번으로 해결
           </p>
         </div>
