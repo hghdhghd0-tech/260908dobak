@@ -49,7 +49,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
   return (
     <div className="flex flex-col h-screen w-full bg-[#0a0d14] text-white font-sans overflow-hidden select-none">
       {/* Top Navbar */}
-      <div className="h-16 bg-[#121620] border-b border-[#1f2636] flex items-center justify-between px-4 z-20">
+      <div className="h-16 bg-[#121620]/85 glass border-b border-[#1f2636] flex items-center justify-between px-4 z-20">
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2 cursor-pointer" onClick={onEnter}>
             <Menu className="text-gray-400 hover:text-white" size={24} />
@@ -97,7 +97,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
 
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar */}
-        <div className="hidden sm:flex w-20 flex-col items-center bg-[#121620] border-r border-[#1f2636] py-6 gap-8 z-10">
+        <div className="hidden sm:flex w-20 flex-col items-center bg-[#121620]/85 glass border-r border-[#1f2636] py-6 gap-8 z-10">
           <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={onEnter}>
             <Crown size={24} className="text-yellow-400 group-hover:scale-110 transition-transform" />
             <span className="text-[10px] text-gray-400 group-hover:text-yellow-400">VIP</span>
@@ -124,11 +124,11 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="relative w-full min-h-[350px] md:min-h-[450px] py-12 rounded-2xl overflow-hidden cursor-pointer group shadow-[0_10px_40px_rgba(0,0,0,0.8)] border-2 border-yellow-500/50 bg-[#2d1b54] flex flex-col justify-center items-center"
+              className="sheen-auto relative w-full min-h-[350px] md:min-h-[450px] py-12 rounded-2xl overflow-hidden cursor-pointer group shadow-[0_10px_40px_rgba(0,0,0,0.8),inset_0_0_140px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.15)] border-2 border-yellow-400/60 bg-[#2d1b54] flex flex-col justify-center items-center"
               onClick={onEnter}
             >
               {/* Flashy background - Purple radial sunburst effect */}
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-pink-500 via-purple-700 to-indigo-950 opacity-90"></div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-fuchsia-500 via-purple-800 to-[#140833] opacity-95"></div>
               
               {/* Sunburst rays pattern */}
               <div className="absolute inset-0 opacity-20 bg-[repeating-conic-gradient(from_0deg,transparent_0deg,transparent_15deg,#ffffff_15deg,#ffffff_30deg)] mix-blend-overlay animate-[spin_60s_linear_infinite]"></div>
@@ -157,14 +157,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
 
                 {/* MASSIVE GOLD TEXT: ₩1,650,000,000 */}
                 <div className="relative z-20 w-full px-2 mb-6">
-                  <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-black-han tracking-tighter w-full text-center py-2 leading-none"
-                      style={{ 
-                        background: 'linear-gradient(180deg, #fff7d6 0%, #facc15 40%, #a16207 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        filter: 'drop-shadow(0px 8px 4px rgba(0,0,0,0.8)) drop-shadow(0px 0px 15px rgba(234,179,8,0.5))',
-                        WebkitTextStroke: '3px #451a03'
-                      }}>
+                  <h1 className="gold-foil text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-black-han tracking-tighter w-full text-center py-2 leading-none">
                     ₩1,650,000,000
                   </h1>
                 </div>
@@ -201,7 +194,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
               
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {/* Game Card 1 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors">
+                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
                   <div className="aspect-[4/3] bg-gradient-to-br from-green-900 to-black relative p-4 flex flex-col items-center justify-center">
                     <span className="text-5xl drop-shadow-lg mb-2">🗿</span>
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
@@ -214,7 +207,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
                 </div>
 
                 {/* Game Card 2 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors">
+                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
                   <div className="aspect-[4/3] bg-gradient-to-br from-red-900 to-black relative p-4 flex flex-col items-center justify-center">
                     <span className="text-5xl drop-shadow-lg mb-2">🐉</span>
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
@@ -227,7 +220,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
                 </div>
 
                 {/* Game Card 3 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors">
+                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
                   <div className="aspect-[4/3] bg-gradient-to-br from-purple-900 to-black relative p-4 flex flex-col items-center justify-center">
                     <span className="text-5xl drop-shadow-lg mb-2">🎰</span>
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
@@ -240,7 +233,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
                 </div>
 
                 {/* Game Card 4 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors">
+                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen">
                   <div className="aspect-[4/3] bg-gradient-to-br from-blue-900 to-black relative p-4 flex flex-col items-center justify-center">
                     <span className="text-5xl drop-shadow-lg mb-2">🪜</span>
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
@@ -253,7 +246,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
                 </div>
 
                 {/* Game Card 5 */}
-                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors hidden lg:block">
+                <div onClick={onEnter} className="group relative bg-[#1c2230] rounded-xl overflow-hidden cursor-pointer border border-[#2b354a] hover:border-yellow-500/50 transition-colors bevel sheen hidden lg:block">
                   <div className="aspect-[4/3] bg-gradient-to-br from-orange-900 to-black relative p-4 flex flex-col items-center justify-center">
                     <span className="text-5xl drop-shadow-lg mb-2">🏇</span>
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors"></div>
@@ -294,7 +287,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({ onEnter }) => {
         </div>
 
         {/* Right Sidebar (Live Winners Feed) */}
-        <div className="hidden xl:flex w-72 flex-col bg-[#121620] border-l border-[#1f2636] z-10">
+        <div className="hidden xl:flex w-72 flex-col bg-[#121620]/85 glass border-l border-[#1f2636] z-10">
           <div className="flex items-center justify-between p-4 border-b border-[#1f2636]">
             <span className="text-gray-300 font-bold">실시간 당첨 현황</span>
             <div className="flex bg-[#1a1f2e] rounded-lg p-1">

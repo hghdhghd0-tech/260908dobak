@@ -134,7 +134,7 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
   }, [spinning]);
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#1a0f2e] font-sans text-white relative select-none items-center justify-center">
+    <div className="flex flex-col h-screen w-full bg-[radial-gradient(ellipse_at_50%_40%,#2a1748_0%,#120820_70%)] font-sans text-white relative select-none items-center justify-center">
       
       {/* Header */}
       <div className="absolute top-0 w-full bg-gradient-to-r from-purple-900 to-indigo-900 text-white text-center py-3 border-b-4 border-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.5)] z-10 flex justify-center items-center">
@@ -142,7 +142,7 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
       </div>
 
       {/* Main Machine Container */}
-      <div className="w-full max-w-4xl bg-gray-900 rounded-3xl border-8 border-gray-700 p-8 shadow-2xl flex flex-col gap-8 mt-16">
+      <div className="w-full max-w-4xl bg-gradient-to-b from-gray-800 to-gray-950 rounded-3xl border-8 border-gray-700 p-8 bevel flex flex-col gap-8 mt-16">
         
         {/* Reels Area */}
         <div className="bg-gray-800 rounded-2xl border-4 border-gray-600 p-6 shadow-inner">
@@ -158,7 +158,7 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
                     initial={spinning[i] ? { y: -50, opacity: 0.5 } : { y: 0, opacity: 1 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={spinning[i] ? { duration: 0.1, repeat: Infinity } : { type: 'spring' }}
-                    className="text-6xl md:text-8xl bg-white text-black w-24 h-32 md:w-32 md:h-40 flex items-center justify-center rounded-xl border-4 border-gray-300 shadow-inner"
+                    className="text-6xl md:text-8xl bg-gradient-to-b from-white to-gray-200 text-black w-24 h-32 md:w-32 md:h-40 flex items-center justify-center rounded-xl border-4 border-gray-300 shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),inset_0_-4px_8px_rgba(0,0,0,0.15),0_6px_12px_-4px_rgba(0,0,0,0.5)]"
                   >
                     {symbol}
                   </motion.div>
@@ -214,7 +214,7 @@ export const SlotScreen: React.FC<SlotScreenProps> = ({
               <button 
                 onClick={handleSpin}
                 disabled={phase !== 'BETTING' || betAmount === 0}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-black-han text-xl md:text-2xl py-3 rounded-lg border-2 border-pink-400 shadow-[0_0_15px_rgba(236,72,153,0.5)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all mt-2"
+                className="sheen w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-black-han text-xl md:text-2xl py-3 rounded-lg border-2 border-pink-400 shadow-[0_0_20px_rgba(236,72,153,0.6),inset_0_1px_0_rgba(255,255,255,0.25)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all mt-2"
               >
                 {phase === 'BETTING' ? 'SPIN !' : '회전 중...'}
               </button>

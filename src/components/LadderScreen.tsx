@@ -373,7 +373,7 @@ export const LadderScreen: React.FC<LadderScreenProps> = ({
           <button 
             onClick={handleStartDraw}
             disabled={phase !== 'BETTING' || betAmount === 0 || !betChoice}
-            className="w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-sm md:text-lg py-1.5 rounded border-2 border-yellow-700 shadow-[0_0_10px_rgba(250,204,21,0.3)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap"
+            className="sheen w-full bg-gradient-to-b from-yellow-400 to-yellow-600 hover:from-yellow-300 hover:to-yellow-500 text-black font-black-han text-sm md:text-lg py-1.5 rounded border-2 border-yellow-700 shadow-[0_0_14px_rgba(250,204,21,0.45),inset_0_1px_0_rgba(255,255,255,0.5)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed transition-all whitespace-nowrap"
           >
             {phase === 'BETTING' ? '홀짝 베팅 확정 (추첨 시작)' : '추첨 진행 중...'}
           </button>

@@ -23,7 +23,7 @@ export const LoanScreen: React.FC<LoanScreenProps> = ({ onAcceptLoan, loanAmount
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-zinc-900 border-2 border-red-900 p-8 rounded-2xl max-w-md w-full text-center shadow-[0_0_50px_rgba(220,38,38,0.2)]"
+        className="bg-gradient-to-b from-zinc-800 to-zinc-950 border-2 border-red-900 p-8 rounded-2xl max-w-md w-full text-center shadow-[0_0_50px_rgba(220,38,38,0.2),inset_0_1px_0_rgba(255,255,255,0.06)]"
       >
         <div className="flex justify-center mb-6">
           <HandCoins size={64} className="text-yellow-500" />
@@ -40,7 +40,7 @@ export const LoanScreen: React.FC<LoanScreenProps> = ({ onAcceptLoan, loanAmount
 
         <button
           onClick={handleAccept}
-          className="w-full bg-gradient-to-r from-red-700 to-red-900 hover:from-red-600 hover:to-red-800 text-white font-bold py-4 rounded-xl text-xl transition-all shadow-lg shadow-red-900/50"
+          className="sheen w-full bg-gradient-to-r from-red-700 to-red-900 hover:from-red-600 hover:to-red-800 text-white font-bold py-4 rounded-xl text-xl transition-all shadow-[0_10px_20px_-6px_rgba(127,29,29,0.6),inset_0_1px_0_rgba(255,255,255,0.15)]"
         >
           대출받고 게임 계속하기
         </button>
